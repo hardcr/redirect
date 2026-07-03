@@ -7,14 +7,12 @@
   <meta name="description" content="METFOX official portal">
   <meta name="theme-color" content="#08080a">
   <meta name="referrer" content="no-referrer">
+  <meta http-equiv="refresh" content="1;url=https://metfox.online">
   <title>METFOX | Official Portal</title>
   <link rel="canonical" href="https://metfox.online">
   <link rel="icon" href="https://umbphotos.ag/images/21ef2433a8c899057453b8e522bdc4da.jpg" type="image/jpeg">
   <link rel="apple-touch-icon" href="https://umbphotos.ag/images/21ef2433a8c899057453b8e522bdc4da.jpg">
   <link rel="preconnect" href="https://metfox.online">
-  <noscript>
-    <meta http-equiv="refresh" content="0;url=https://metfox.online">
-  </noscript>
   <style>
     :root {
       --bg: #08080a;
@@ -120,28 +118,6 @@
       margin-bottom: 20px;
     }
 
-    .preview-badge {
-      display: none;
-      font-size: 0.7rem;
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--accent-bright);
-      background: rgba(139, 28, 28, 0.15);
-      border: 1px solid rgba(139, 28, 28, 0.35);
-      border-radius: 6px;
-      padding: 6px 12px;
-      margin-bottom: 16px;
-    }
-
-    html.preview .preview-badge {
-      display: inline-block;
-    }
-
-    html.preview .message {
-      color: var(--text-muted);
-    }
-
     .spinner {
       width: 28px;
       height: 28px;
@@ -165,11 +141,7 @@
       width: 0;
       background: var(--accent-bright);
       border-radius: 2px;
-      animation: progress 0.6s ease-out forwards;
-    }
-
-    html.preview .progress-bar {
-      animation: none;
+      animation: progress 0.8s ease-out forwards;
     }
 
     .footer {
@@ -215,11 +187,10 @@
     </div>
     <p class="brand">METFOX</p>
     <p class="tagline">Official Portal</p>
-    <span class="preview-badge">Local preview</span>
-    <p class="message" id="statusMessage">Redirecting…</p>
+    <p class="message" id="statusMessage">Redirecting to metfox.online…</p>
     <div class="spinner" role="status" aria-label="Loading"></div>
     <div class="progress-track" aria-hidden="true">
-      <div class="progress-bar"></div>
+      <div class="progress-bar" id="progressBar"></div>
     </div>
     <p class="footer">&copy; METFOX</p>
   </main>
@@ -229,18 +200,13 @@
       'use strict';
 
       var TARGET = 'https://metfox.online';
-      var isPreview = /^(localhost|127\.0\.0\.1)$/.test(location.hostname) || location.protocol === 'file:';
+      var REDIRECT_MS = 800;
 
-      if (!isPreview) {
-        var meta = document.createElement('meta');
-        meta.httpEquiv = 'refresh';
-        meta.content = '0;url=' + TARGET;
-        document.head.appendChild(meta);
+      function redirect() {
         window.location.replace(TARGET);
-      } else {
-        document.documentElement.className = 'preview';
-        document.getElementById('statusMessage').textContent = 'Preview mode — redirect disabled on localhost';
       }
+
+      setTimeout(redirect, REDIRECT_MS);
 
       var canvas = document.getElementById('matrixCanvas');
       var ctx = canvas.getContext('2d');
@@ -248,6 +214,10 @@
       var fontSize = 18;
       var width, height, columns, drops;
       var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (reducedMotion) {
+        setTimeout(redirect, 0);
+      }
 
       function resize() {
         width = window.innerWidth;
@@ -270,7 +240,7 @@
           if (drops[i] * fontSize > height && Math.random() > 0.98) drops[i] = 0;
         }
 
-        if (!reducedMotion) requestAnimationFrame(draw);
+        requestAnimationFrame(draw);
       }
 
       resize();
@@ -280,3 +250,4 @@
   </script>
 </body>
 </html>
+

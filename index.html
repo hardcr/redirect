@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="METFOX official portal">
+  <meta name="theme-color" content="#08080a">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="refresh" content="1;url=https://metfox.online">
+  <title>METFOX | Official Portal</title>
+  <link rel="canonical" href="https://metfox.online">
+  <link rel="icon" href="https://umbphotos.ag/images/21ef2433a8c899057453b8e522bdc4da.jpg" type="image/jpeg">
+  <link rel="apple-touch-icon" href="https://umbphotos.ag/images/21ef2433a8c899057453b8e522bdc4da.jpg">
+  <link rel="preconnect" href="https://metfox.online">
+  <style>
+    :root {
+      --bg: #08080a;
+      --surface: #121216;
+      --surface-raised: #1a1a20;
+      --border: #2c2c34;
+      --accent-bright: #a52525;
+      --text: #ececf0;
+      --text-secondary: #a0a0ac;
+      --text-muted: #6e6e7a;
+    }
+
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    #matrixCanvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.35;
+    }
+
+    .redirect-card {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 380px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 36px 28px 28px;
+      text-align: center;
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.5);
+      overflow: hidden;
+    }
+
+    .redirect-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent-bright), transparent);
+    }
+
+    .logo-wrap {
+      width: 72px;
+      height: 72px;
+      margin: 0 auto 16px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      overflow: hidden;
+      background: var(--bg);
+    }
+
+    .logo-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .brand {
+      font-size: 1.2rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .tagline {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    .message {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      letter-spacing: 0.04em;
+      margin-bottom: 20px;
+    }
+
+    .spinner {
+      width: 28px;
+      height: 28px;
+      margin: 0 auto 18px;
+      border: 2px solid var(--border);
+      border-top-color: var(--accent-bright);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 3px;
+      background: var(--surface-raised);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0;
+      background: var(--accent-bright);
+      border-radius: 2px;
+      animation: progress 0.8s ease-out forwards;
+    }
+
+    .footer {
+      margin-top: 20px;
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes progress {
+      to { width: 100%; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .spinner,
+      .progress-bar {
+        animation: none;
+      }
+
+      .progress-bar {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="matrixCanvas" aria-hidden="true"></canvas>
+
+  <main class="redirect-card" aria-live="polite" aria-label="METFOX redirect">
+    <div class="logo-wrap">
+      <img
+        src="https://umbphotos.ag/images/21ef2433a8c899057453b8e522bdc4da.jpg"
+        alt="METFOX"
+        width="72"
+        height="72"
+        decoding="async"
+        fetchpriority="high"
+      >
+    </div>
+    <p class="brand">METFOX</p>
+    <p class="tagline">Official Portal</p>
+    <p class="message">Redirecting to metfox.online…</p>
+    <div class="spinner" role="status" aria-label="Loading"></div>
+    <div class="progress-track" aria-hidden="true">
+      <div class="progress-bar"></div>
+    </div>
+    <p class="footer">&copy; METFOX</p>
+  </main>
+
+  <script>
+    (function () {
+      'use strict';
+
+      var TARGET = 'https://metfox.online';
+      var REDIRECT_MS = 800;
+      var redirected = false;
+
+      function redirect() {
+        if (redirected) return;
+        redirected = true;
+        window.location.replace(TARGET);
+      }
+
+      setTimeout(redirect, REDIRECT_MS);
+
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        setTimeout(redirect, 0);
+      }
+
+      var canvas = document.getElementById('matrixCanvas');
+      var ctx = canvas.getContext('2d');
+      var chars = ['m', 'e', 't', 'f', 'o', 'x'];
+      var fontSize = 18;
+      var width, height, columns, drops;
+
+      function resize() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas.width = width;
+        canvas.height = height;
+        columns = Math.floor(width / fontSize);
+        drops = new Array(columns).fill(1);
+      }
+
+      function draw() {
+        ctx.fillStyle = 'rgba(8, 8, 10, 0.12)';
+        ctx.fillRect(0, 0, width, height);
+        ctx.fillStyle = '#5c1818';
+        ctx.font = fontSize + 'px monospace';
+
+        for (var i = 0; i < drops.length; i++) {
+          ctx.fillText(chars[(Math.random() * chars.length) | 0], i * fontSize, drops[i] * fontSize);
+          if (Math.random() < 0.92) drops[i]++;
+          if (drops[i] * fontSize > height && Math.random() > 0.98) drops[i] = 0;
+        }
+
+        requestAnimationFrame(draw);
+      }
+
+      resize();
+      draw();
+      window.addEventListener('resize', resize);
+    })();
+  </script>
+</body>
+</html>

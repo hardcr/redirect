@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redirecting …</title>
+  <!-- Simple, clean redirect page -->
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background: #f5f7fa;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      padding: 1rem;
+    }
+    .card {
+      max-width: 600px;
+      width: 100%;
+      background: white;
+      border-radius: 32px;
+      box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.15), 0 4px 18px rgba(0, 0, 0, 0.05);
+      padding: 2.5rem 2rem;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: #0b1a33;
+      margin-bottom: 0.5rem;
+    }
+    .subhead {
+      font-size: 1.1rem;
+      color: #3b4a62;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid #e9edf4;
+      padding-bottom: 1.2rem;
+    }
+    .icon-box {
+      background: #eef3fc;
+      width: 72px;
+      height: 72px;
+      border-radius: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+    }
+    .icon-box svg {
+      width: 36px;
+      height: 36px;
+      stroke: #1a5cff;
+      stroke-width: 2;
+      fill: none;
+    }
+    .spinner {
+      display: inline-block;
+      width: 32px;
+      height: 32px;
+      border: 4px solid #e2e8f0;
+      border-top: 4px solid #1a5cff;
+      border-radius: 50%;
+      animation: spin 0.9s linear infinite;
+      margin: 0.5rem 0 1.2rem;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .destination-url {
+      background: #f1f5f9;
+      padding: 0.7rem 1rem;
+      border-radius: 60px;
+      font-size: 0.95rem;
+      color: #1f2a44;
+      word-break: break-all;
+      display: inline-block;
+      max-width: 100%;
+      margin: 0.5rem 0 1rem;
+      border: 1px solid #dce3ec;
+    }
+    .action-link {
+      display: inline-block;
+      margin-top: 0.75rem;
+      font-weight: 500;
+      background: #1a5cff;
+      color: white;
+      padding: 0.7rem 2rem;
+      border-radius: 60px;
+      text-decoration: none;
+      transition: background 0.15s, transform 0.1s;
+      border: none;
+      font-size: 1rem;
+    }
+    .action-link:hover {
+      background: #1047d9;
+    }
+    .action-link:active {
+      transform: scale(0.97);
+    }
+    .footnote {
+      margin-top: 2rem;
+      font-size: 0.9rem;
+      color: #5d6f88;
+      border-top: 1px solid #edf2f9;
+      padding-top: 1.5rem;
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .footnote a {
+      color: #1a5cff;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .footnote a:hover {
+      text-decoration: underline;
+    }
+    .secondary-btn {
+      background: transparent;
+      color: #1a5cff;
+      border: 1px solid #d0dcec;
+      padding: 0.5rem 1.5rem;
+      border-radius: 60px;
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: 0.1s;
+      display: inline-block;
+      margin-top: 0.2rem;
+    }
+    .secondary-btn:hover {
+      background: #eef3fc;
+      border-color: #a0b8d9;
+    }
+    .flex-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem 1.2rem;
+    }
+    .redirect-now {
+      font-weight: 450;
+    }
+    @media (max-width: 480px) {
+      .card { padding: 2rem 1.25rem; }
+      h1 { font-size: 1.8rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="card" role="main" aria-label="redirect page">
+    <div class="icon-box">
+      <!-- simple arrow/redirect icon -->
+      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 12h13M18 12l-4-4M18 12l-4 4" />
+        <path d="M4 19v-2a4 4 0 0 1 4-4h12" />
+      </svg>
+    </div>
+
+    <h1>Redirecting you</h1>
+    <p class="subhead">You will be sent to the destination in a moment.</p>
+
+    <!-- spinner to indicate activity -->
+    <div class="spinner" aria-label="loading"></div>
+
+    <!-- display the target URL clearly -->
+    <div>
+      <span class="destination-url" id="displayUrl">OoO</span>
+    </div>
+
+    <!-- manual redirect button + fallback link -->
+    <div class="flex-row" style="margin: 0.5rem 0 0.2rem;">
+      <a href="#" id="redirectLink" class="action-link">Go now →</a>
+      <a href="#" id="fallbackLink" class="secondary-btn">direct link</a>
+    </div>
+
+    <div class="footnote">
+      <span>⏱️ redirect in <strong id="countdownDisplay">5</strong>s</span>
+      <span>·</span>
+      <a href="#" id="cancelRedirect" style="color:#6b7f9a;">cancel</a>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      // ---------- CONFIGURATION ----------
+      // Set your destination URL here (change this to whatever you need)
+      const TARGET_URL = 'https://www.metfox.cc';
+      
+      // Redirect delay in seconds (default 5)
+      const REDIRECT_DELAY_SECONDS = 5;
+      
+      // -----------------------------------
+      // DOM elements
+      const displayUrlEl = document.getElementById('displayUrl');
+      const redirectLink = document.getElementById('redirectLink');
+      const fallbackLink = document.getElementById('fallbackLink');
+      const countdownSpan = document.getElementById('countdownDisplay');
+      const cancelBtn = document.getElementById('cancelRedirect');
+
+      // Show the target URL in the box
+      if (displayUrlEl) {
+        // clean display: remove protocol for readability, but keep if it's short
+        let display = TARGET_URL;
+        try {
+          const urlObj = new URL(TARGET_URL);
+          display = urlObj.hostname + urlObj.pathname;
+          if (display.length > 50) display = TARGET_URL; // fallback
+        } catch (_) {
+          // if invalid URL, just show as-is
+          display = TARGET_URL;
+        }
+        displayUrlEl.textContent = display;
+      }
+
+      // Set the href for both links
+      redirectLink.href = TARGET_URL;
+      fallbackLink.href = TARGET_URL;
+
+      // countdown state
+      let secondsLeft = REDIRECT_DELAY_SECONDS;
+      let countdownInterval = null;
+      let redirectTimeout = null;
+
+      // Update countdown display
+      function updateCountdownDisplay() {
+        if (countdownSpan) {
+          countdownSpan.textContent = secondsLeft;
+        }
+      }
+
+      // Perform the redirect (window.location)
+      function performRedirect() {
+        // clear any pending timeouts/intervals to avoid double redirect
+        if (redirectTimeout) {
+          clearTimeout(redirectTimeout);
+          redirectTimeout = null;
+        }
+        if (countdownInterval) {
+          clearInterval(countdownInterval);
+          countdownInterval = null;
+        }
+        // go!
+        window.location.href = TARGET_URL;
+      }
+
+      // Cancel / stop redirect
+      function cancelRedirect() {
+        // clear timers
+        if (redirectTimeout) {
+          clearTimeout(redirectTimeout);
+          redirectTimeout = null;
+        }
+        if (countdownInterval) {
+          clearInterval(countdownInterval);
+          countdownInterval = null;
+        }
+        // set countdown to 0 and update UI
+        secondsLeft = 0;
+        updateCountdownDisplay();
+        // change button text / style optionally
+        if (countdownSpan) {
+          countdownSpan.textContent = '0';
+        }
+        // show that redirect is cancelled (mild visual)
+        const footnote = document.querySelector('.footnote');
+        if (footnote) {
+          // add a small indicator
+          const cancelMsg = document.createElement('span');
+          cancelMsg.textContent = '⛔ cancelled';
+          cancelMsg.style.color = '#b91c1c';
+          cancelMsg.style.fontWeight = '500';
+          // remove old cancel link if present, but keep the structure
+          const oldCancel = document.getElementById('cancelRedirect');
+          if (oldCancel) oldCancel.remove();
+          // replace with text
+          const existingText = footnote.querySelector('span:first-child');
+          if (existingText) {
+            // insert after the first span
+            const newSpan = document.createElement('span');
+            newSpan.textContent = '·';
+            footnote.insertBefore(newSpan, existingText.nextSibling);
+            const msgSpan = document.createElement('span');
+            msgSpan.textContent = '⛔ redirect cancelled';
+            msgSpan.style.color = '#b22222';
+            msgSpan.style.fontWeight = '500';
+            footnote.insertBefore(msgSpan, newSpan.nextSibling);
+          }
+        }
+        // Disable the "Go now" button? we keep it functional (it still works)
+        // but we change the visual feedback
+        redirectLink.style.opacity = '0.7';
+        redirectLink.textContent = '⏳ cancelled';
+        // the link still works (href is set) but we change text.
+        // Also disable the countdown display
+      }
+
+      // start countdown and redirect
+      function startRedirectCountdown() {
+        // clear any previous timers
+        if (redirectTimeout) {
+          clearTimeout(redirectTimeout);
+          redirectTimeout = null;
+        }
+        if (countdownInterval) {
+          clearInterval(countdownInterval);
+          countdownInterval = null;
+        }
+
+        secondsLeft = REDIRECT_DELAY_SECONDS;
+        updateCountdownDisplay();
+
+        // set up interval
+        countdownInterval = setInterval(() => {
+          secondsLeft -= 1;
+          updateCountdownDisplay();
+
+          if (secondsLeft <= 0) {
+            // time's up -> redirect
+            clearInterval(countdownInterval);
+            countdownInterval = null;
+            performRedirect();
+          }
+        }, 1000);
+
+        // also set a safety timeout (in case interval gets blocked)
+        redirectTimeout = setTimeout(() => {
+          // if we reach this and redirect hasn't happened, force it
+          if (secondsLeft > 0) {
+            // clear interval to avoid double redirect
+            if (countdownInterval) {
+              clearInterval(countdownInterval);
+              countdownInterval = null;
+            }
+            performRedirect();
+          }
+        }, (REDIRECT_DELAY_SECONDS + 1) * 1000);
+      }
+
+      // ----- event listeners -----
+      // "Go now" — immediate redirect (no delay)
+      redirectLink.addEventListener('click', function(e) {
+        e.preventDefault(); // prevent default link behaviour
+        // cancel any pending auto-redirect
+        if (redirectTimeout) {
+          clearTimeout(redirectTimeout);
+          redirectTimeout = null;
+        }
+        if (countdownInterval) {
+          clearInterval(countdownInterval);
+          countdownInterval = null;
+        }
+        // go directly
+        window.location.href = TARGET_URL;
+      });
+
+      // fallback link (direct) — same as "Go now" but different style
+      fallbackLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        if (redirectTimeout) {
+          clearTimeout(redirectTimeout);
+          redirectTimeout = null;
+        }
+        if (countdownInterval) {
+          clearInterval(countdownInterval);
+          countdownInterval = null;
+        }
+        window.location.href = TARGET_URL;
+      });
+
+      // Cancel redirect (stop countdown and auto-redirect)
+      cancelBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        cancelRedirect();
+      });
+
+      // if user clicks the "destination-url" or anything else? we keep it simple.
+
+      // ----- Start the process on page load -----
+      // Small delay to let everything render
+      window.addEventListener('load', function() {
+        // ensure we start fresh
+        if (redirectTimeout) {
+          clearTimeout(redirectTimeout);
+          redirectTimeout = null;
+        }
+        if (countdownInterval) {
+          clearInterval(countdownInterval);
+          countdownInterval = null;
+        }
+        startRedirectCountdown();
+      });
+
+      // If the page is loaded via BFCache or similar, restart
+      document.addEventListener('visibilitychange', function() {
+        if (document.visibilityState === 'visible') {
+          // if the countdown is 0 or stopped, restart? 
+          // but we only restart if the redirect hasn't been cancelled manually.
+          // check if we have an active interval or if secondsLeft > 0 and no redirect done.
+          // For simplicity: if there's no interval and secondsLeft > 0, restart.
+          // But we also want to prevent restart if user cancelled.
+          // we'll use a flag: if cancel was clicked, we don't restart.
+          if (window._redirectCancelled) return;
+          if (!countdownInterval && secondsLeft > 0 && !redirectTimeout) {
+            // restart
+            startRedirectCountdown();
+          }
+        }
+      });
+
+      // store cancel flag on window (to avoid restart after cancel)
+      const originalCancel = cancelRedirect;
+      cancelRedirect = function() {
+        window._redirectCancelled = true;
+        originalCancel.call(this);
+      };
+      // reassign the event listener to use the new cancel
+      cancelBtn.removeEventListener('click', cancelRedirect);
+      cancelBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        window._redirectCancelled = true;
+        // call the original cancel logic
+        if (redirectTimeout) {
+          clearTimeout(redirectTimeout);
+          redirectTimeout = null;
+        }
+        if (countdownInterval) {
+          clearInterval(countdownInterval);
+          countdownInterval = null;
+        }
+        secondsLeft = 0;
+        updateCountdownDisplay();
+        // visual update
+        const footnote = document.querySelector('.footnote');
+        if (footnote) {
+          // remove old cancel link if present
+          const oldCancel = document.getElementById('cancelRedirect');
+          if (oldCancel) oldCancel.remove();
+          // add message
+          const firstSpan = footnote.querySelector('span:first-child');
+          if (firstSpan) {
+            const dot = document.createElement('span');
+            dot.textContent = '·';
+            footnote.insertBefore(dot, firstSpan.nextSibling);
+            const msg = document.createElement('span');
+            msg.textContent = '⛔ cancelled';
+            msg.style.color = '#b22222';
+            msg.style.fontWeight = '500';
+            footnote.insertBefore(msg, dot.nextSibling);
+          }
+        }
+        redirectLink.style.opacity = '0.7';
+        redirectLink.textContent = '⏳ cancelled';
+      });
+
+      // handle edge case: if the user clicks the "destination-url" or something else
+      // we don't interfere.
+
+      console.log(`🔁 Redirect page ready — will redirect to ${TARGET_URL} in ${REDIRECT_DELAY_SECONDS}s`);
+    })();
+  </script>
+</body>
+</html>
